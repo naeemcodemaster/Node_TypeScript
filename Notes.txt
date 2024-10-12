@@ -14,3 +14,5 @@
 9) npm i express
 
 10) npm i -D @types/express  (for express inbuilt type helper)
+11)npm i dotenv
+12) npm i -D @types/dotenv
