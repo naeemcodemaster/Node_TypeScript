@@ -10,3 +10,7 @@
 7) create git file, type in search >gitignore select then add language and you r good to go.
 
 8) npm init @eslint/config    (for best practices, fix bug initially)
+
+9) npm i express
+
+10) npm i -D @types/express  (for express inbuilt type helper)
