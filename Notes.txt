@@ -1,0 +1,8 @@
+1) npm init
+2) npm install -D typescript 
+3) npm i ts-node  for typescript ka output dekhny hai , warna phly js me convert kro phr run kro or phr dekh output. Es me direct typescript ko he run kry ga, internally memory ko use kr k.
+4) npm i nodemon for live changes
+5) npm i @types/node   inbuilt modules ko use krny k liay kn kn say types chaye ye dekhaye ga ta k help ho.
+
+
+6) npx tsc --init    typescript ka compiler hai. Config file generate kry ga ta k configurations kry typescript ki.
