@@ -8,3 +8,5 @@
 6) npx tsc --init    typescript ka compiler hai. Config file generate kry ga ta k configurations kry typescript ki.
 
 7) create git file, type in search >gitignore select then add language and you r good to go.
+
+8) npm init @eslint/config    (for best practices, fix bug initially)
