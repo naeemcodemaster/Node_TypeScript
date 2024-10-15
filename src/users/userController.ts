@@ -46,7 +46,7 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
       expiresIn: "7d",
       algorithm: "HS256",
     });
-    res.json({ accessToken: token });
+    res.status(201).json({ accessToken: token });
   } catch (error) {
     return next(
       createHttpError(500, "Error while Signing the JWT token" + error)
@@ -54,4 +54,6 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { createUser };
+const loginUser = async (req: Request, res: Response, next: NextFunction) => {};
+
+export { createUser, loginUser };
