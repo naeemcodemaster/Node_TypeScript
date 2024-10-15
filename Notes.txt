@@ -16,3 +16,9 @@
 10) npm i -D @types/express  (for express inbuilt type helper)
 11)npm i dotenv
 12) npm i -D @types/dotenv
+
+13)npm i bcrypt
+14)npm i @types/bcrypt
+
+15) npm i jsonwebtoken
+16)npm i -D @types/jsonwebtoken

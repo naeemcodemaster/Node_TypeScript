@@ -6,6 +6,7 @@ const _config = {
   port: process.env.PORT,
   mongo_url: process.env.MONGO_URL,
   env: process.env.NODE_ENV,
+  jwtSecret: process.env.JWT_SECRET,
 };
 
 // port overwrite nhi hoga dosri file me freeze kya hua a.
