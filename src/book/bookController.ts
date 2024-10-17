@@ -1,8 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import cloudinary from "../config/cloudinary";
 import path from "node:path";
+import fs from "node:fs";
+import bookModel from "./bookModel";
+import createHttpError from "http-errors";
 const createBook = async (req: Request, res: Response, next: NextFunction) => {
-  console.log(req.files);
+  const { title, genre } = req.body;
 
   // Cover Image upload work here
   const files = req.files as { [fieldname: string]: Express.Multer.File[] };
@@ -23,6 +26,7 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
     "../../public/data/uploads",
     fileName
   );
+
   const bookFileUploadResult = await cloudinary.uploader.upload(bookFilePath, {
     resource_type: "raw",
     filename_override: bookFileName,
@@ -30,7 +34,26 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
     format: "pdf",
   });
 
-  res.json({ coverMessage: uploadResult, fileMessage: bookFileUploadResult });
+  const newBook = await bookModel.create({
+    title,
+    genre,
+    author: "670dd8b97ed19857a2594b7d",
+    coverImage: uploadResult.secure_url,
+    file: bookFileUploadResult.secure_url,
+  });
+
+  // Delete Temp Files
+  try {
+    await fs.promises.unlink(filePath);
+    await fs.promises.unlink(bookFilePath);
+  } catch (error) {
+    console.log(error);
+    next(createHttpError(400, "Temp files not deleted"));
+  }
+
+  // res.json({ coverMessage: uploadResult, fileMessage: bookFileUploadResult });
+
+  res.status(201).json({ id: newBook._id });
 };
 
 export { createBook };
