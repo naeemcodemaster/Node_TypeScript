@@ -93,6 +93,25 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
   const files = req.files as { [fieldname: string]: Express.Multer.File[] };
   let completeCoverImage = ""; // Change to let
   if (files.coverImage) {
+    // Delete already cover image from cloudinary
+    const coverFileSplits = book.coverImage.split("/");
+    const coverImagePublicId =
+      coverFileSplits.at(-2) + "/" + coverFileSplits.at(-1)?.split(".").at(-2);
+    console.log(coverImagePublicId);
+
+    // Delete normal image from cloudinary
+    const bookFileSplite = book.file.split("/");
+    const bookFilePublicId =
+      bookFileSplite.at(-2) + "/" + bookFileSplite.at(-1);
+    console.log(bookFilePublicId);
+
+    // Normal File Delete
+    await cloudinary.uploader.destroy(coverImagePublicId);
+    //PDF Delete
+    await cloudinary.uploader.destroy(bookFilePublicId, {
+      resource_type: "raw",
+    });
+
     const filename = files.coverImage[0].filename;
     const coverMimeType = files.coverImage[0].mimetype.split("/").at(-1);
 
