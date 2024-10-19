@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import cloudinary from "../config/cloudinary";
-import path from "node:path";
+import path, { resolve } from "node:path";
 import fs from "node:fs";
 import bookModel from "./bookModel";
 import createHttpError from "http-errors";
 import { AuthRequest } from "../middlewares/authenticate";
 const createBook = async (req: Request, res: Response, next: NextFunction) => {
-  const { title, genre } = req.body;
+  const { title, genre, description } = req.body;
 
   // Cover Image upload work here
   const files = req.files as { [fieldname: string]: Express.Multer.File[] };
@@ -41,6 +41,7 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
   const newBook = await bookModel.create({
     title,
     genre,
+    description,
     author: _req.userId,
     coverImage: uploadResult.secure_url,
     file: bookFileUploadResult.secure_url,
@@ -74,7 +75,7 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
 
 // Update book
 const updateBook = async (req: Request, res: Response, next: NextFunction) => {
-  const { title, genre } = req.body;
+  const { title, genre, description } = req.body;
   const bookId = req.params.bookId;
   const book = await bookModel.findById(bookId); // Pass bookId directly
 
@@ -157,6 +158,7 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
     {
       title: title,
       genre: genre,
+      description: description,
       coverImage: completeCoverImage ? completeCoverImage : book.coverImage,
       file: completeFileName ? completeFileName : book.file, // Correct property reference
     },
@@ -170,8 +172,9 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
 
 // Get all books
 const listBooks = async (req: Request, res: Response, next: NextFunction) => {
+  // const sleep = await new Promise((resolve) => setTimeout(resolve, 5000));
   try {
-    const books = await bookModel.find();
+    const books = await bookModel.find().populate("author", "name");
     res.json({ books });
   } catch (error) {
     console.log(error);
@@ -183,7 +186,9 @@ const singleBook = async (req: Request, res: Response, next: NextFunction) => {
   const bookId = req.params.bookId;
 
   try {
-    const book = await bookModel.findOne({ _id: bookId });
+    const book = await bookModel
+      .findOne({ _id: bookId })
+      .populate("author", "name");
     if (!book) {
       return next(createHttpError(404, "Book not found"));
     }
