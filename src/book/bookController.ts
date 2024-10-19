@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import cloudinary from "../config/cloudinary";
-import path, { resolve } from "node:path";
+import path from "node:path";
 import fs from "node:fs";
 import bookModel from "./bookModel";
 import createHttpError from "http-errors";
