@@ -4,6 +4,7 @@ import path from "node:path";
 import fs from "node:fs";
 import bookModel from "./bookModel";
 import createHttpError from "http-errors";
+import { AuthRequest } from "../middlewares/authenticate";
 const createBook = async (req: Request, res: Response, next: NextFunction) => {
   const { title, genre } = req.body;
 
@@ -34,14 +35,18 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
     format: "pdf",
   });
 
+  const _req = req as AuthRequest;
+
   const newBook = await bookModel.create({
     title,
     genre,
-    author: "670dd8b97ed19857a2594b7d",
+    author: _req.userId,
     coverImage: uploadResult.secure_url,
     file: bookFileUploadResult.secure_url,
   });
 
+  console.log("First path", filePath);
+  console.log("second path ", bookFilePath);
   // Delete Temp Files
   try {
     await fs.promises.unlink(filePath);

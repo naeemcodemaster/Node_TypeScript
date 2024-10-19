@@ -1,14 +1,15 @@
 import { Request, Response, NextFunction } from "express";
 import createHttpError from "http-errors";
-import jwt from "jsonwebtoken";
+import { verify } from "jsonwebtoken";
 import { config } from "../config/config";
 
 export interface AuthRequest extends Request {
-  userId: string;
+  userId?: string;
 }
 
 const authenticate = (req: Request, res: Response, next: NextFunction) => {
   const token = req.header("Authorization");
+
   if (!token) {
     return next(createHttpError(401, "Authorization token is required"));
   }
@@ -16,14 +17,14 @@ const authenticate = (req: Request, res: Response, next: NextFunction) => {
   try {
     const parseToken = token.split(" ")[1];
 
-    const decoded = jwt.verify(parseToken, config.jwtSecret as string);
+    const decoded = verify(parseToken, config.jwtSecret as string);
     const _req = req as AuthRequest;
     _req.userId = decoded.sub as string;
+    next();
   } catch (error) {
+    console.log(error);
     return next(createHttpError(401, "Token expired"));
   }
-
-  next();
 };
 
 export default authenticate;
