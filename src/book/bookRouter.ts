@@ -6,17 +6,17 @@ import {
   singleBook,
   updateBook,
 } from "./bookController";
-import multer, { FileFilterCallback } from "multer";
+import multer from "multer";
 import path from "node:path";
 import authenticate from "../middlewares/authenticate";
 const bookRouter = express.Router();
 
 // file store local  ->
 const upload = multer({
-  dest: path.resolve(__dirname, "../../public/data/uploads"),
-  limits: { fileSize: 3e7 }, // byte me data store kry ga.    // 30MB  <=  30 * 1024 * 1024
-  fileFilter: (req, file, cb: FileFilterCallback) => {
-    // Check the file size in the request headers if the file is less than 10MB
+  dest: path.resolve("/tmp", "uploads"), // Use the /tmp directory for uploads
+  limits: { fileSize: 3e7 }, // Limit file size to 30MB
+  fileFilter: (req, file, cb) => {
+    // Check the file size in the request headers; reject if it exceeds 10MB
     if (
       req.headers["content-length"] &&
       parseInt(req.headers["content-length"]) > 10 * 1024 * 1024
