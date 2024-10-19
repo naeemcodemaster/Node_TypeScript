@@ -1,5 +1,5 @@
 import express from "express";
-import { createBook } from "./bookController";
+import { createBook, updateBook } from "./bookController";
 import multer, { FileFilterCallback } from "multer";
 import path from "node:path";
 import authenticate from "../middlewares/authenticate";
@@ -15,12 +15,16 @@ const upload = multer({
       req.headers["content-length"] &&
       parseInt(req.headers["content-length"]) > 10 * 1024 * 1024
     ) {
-      return cb(new Error("File size exceeds the 10MB limit") as any, false);
+      return cb(
+        new Error("File size exceeds the 10MB limit") as unknown as null,
+        false
+      );
     }
     cb(null, true); // Accept the file if it meets the condition
   },
 });
 
+// Add New Book
 bookRouter.post(
   "/",
   authenticate,
@@ -29,6 +33,17 @@ bookRouter.post(
     { name: "file", maxCount: 1 },
   ]),
   createBook
+);
+
+// Update Book
+bookRouter.patch(
+  "/:bookId",
+  authenticate,
+  upload.fields([
+    { name: "coverImage", maxCount: 1 },
+    { name: "file", maxCount: 1 },
+  ]),
+  updateBook
 );
 
 export default bookRouter;
