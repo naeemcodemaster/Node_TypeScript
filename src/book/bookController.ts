@@ -13,7 +13,7 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
   const coverImageMimeType = files.coverImage[0].mimetype.split("/").at(-1); // e.g image/png
 
   const fileName = files.coverImage[0].filename;
-  const filePath = path.join(__dirname, "../../public/data/uploads", fileName);
+  const filePath = path.join("/temp", fileName);
 
   const uploadResult = await cloudinary.uploader.upload(filePath, {
     filename_override: fileName,
@@ -23,11 +23,7 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
 
   // file image upload work here
   const bookFileName = files.file[0].filename;
-  const bookFilePath = path.join(
-    __dirname,
-    "../../public/data/uploads",
-    bookFileName
-  );
+  const bookFilePath = path.join("/temp", bookFileName);
 
   const bookFileUploadResult = await cloudinary.uploader.upload(bookFilePath, {
     resource_type: "raw",
