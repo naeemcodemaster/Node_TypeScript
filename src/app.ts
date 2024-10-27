@@ -11,7 +11,7 @@ const app = express();
 app.use(
   cors({
     origin: (origin, callback) => {
-      const allowedOrigins = [config.frontendDomain, config.react_app];
+      const allowedOrigins = [config.frontendDomain, config.reactApp];
       // Allow requests with no origin (like mobile apps or curl requests)
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
