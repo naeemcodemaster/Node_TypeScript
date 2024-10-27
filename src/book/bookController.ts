@@ -10,6 +10,7 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
 
   // Cover Image upload work here
   const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
   const coverImageMimeType = files.coverImage[0].mimetype.split("/").at(-1); // e.g image/png
 
   const fileName = files.coverImage[0].filename;
@@ -110,6 +111,7 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
     });
 
     const filename = files.coverImage[0].filename;
+    console.log("Filename is ", filename);
     const coverMimeType = files.coverImage[0].mimetype.split("/").at(-1);
 
     const filePath = path.resolve(
