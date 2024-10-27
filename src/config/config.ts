@@ -11,6 +11,7 @@ const _config = {
   cloudinaryAPIKey: process.env.CLOUDINARY_API_KEY,
   cloudinaryAPISecret: process.env.CLOUDINARY_API_SECRET,
   frontendDomain: process.env.FRONTEND_DOMAIN,
+  react_app: process.env.REACT_DASHBOARD,
 };
 
 // port overwrite nhi hoga dosri file me freeze kya hua a.
